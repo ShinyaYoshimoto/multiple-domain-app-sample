@@ -1,0 +1,21 @@
+project_id  = "my-gcp-project"
+region      = "asia-northeast1"
+environment = "dev"
+image_tag   = "latest"
+
+# 外部 HTTPS LB（+ Cloud Armor）経由で公開する場合
+ingress         = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+invoker_members = ["allUsers"]
+
+min_instances = 0
+max_instances = 10
+
+env_vars = {
+  ITEM_REPOSITORY = "prisma"
+}
+
+# AlloyDB（プライベート IP）に接続する場合
+# vpc_egress = {
+#   network    = "projects/my-gcp-project/global/networks/main"
+#   subnetwork = "projects/my-gcp-project/regions/asia-northeast1/subnetworks/run-egress"
+# }

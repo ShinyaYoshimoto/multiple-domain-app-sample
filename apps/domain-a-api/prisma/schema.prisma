@@ -1,0 +1,29 @@
+// Domain A 専用の DB スキーマ。
+// ドメインごとに schema.prisma / Prisma Client を分離し、他ドメインのテーブルには直接アクセスしない。
+
+generator client {
+  provider = "prisma-client-js"
+  // 生成先をアプリ配下に固定する。
+  // pnpm workspace では @prisma/client が全アプリで共有されるため、
+  // デフォルト（node_modules/.prisma/client）だとドメイン間で生成物が上書きされてしまう。
+  output   = "../generated/prisma"
+  // Cloud Run コンテナ（node:22-bookworm-slim / OpenSSL 3）用のクエリエンジンを同梱する
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql" // AlloyDB は PostgreSQL 互換
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  id          String   @id @db.Uuid
+  name        String   @db.VarChar(100)
+  description String?  @db.VarChar(1000)
+  price       Int // 最小通貨単位（円）で保持する
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([name])
+  @@map("items")
+}

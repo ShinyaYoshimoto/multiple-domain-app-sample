@@ -1,0 +1,16 @@
+{
+  "name": "@packages/database-common",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Prisma クライアントの生成・ライフサイクル管理、DB 接続設定、Prisma エラー変換の共通処理",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@packages/core-domain": "workspace:*"
+  }
+}
