@@ -1,0 +1,30 @@
+{
+  "name": "@app/domain-b-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Domain B (Order) の Cloud Run API サービス",
+  "main": "dist/index.js",
+  "files": ["dist", "generated", "prisma"],
+  "scripts": {
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "build": "prisma generate && tsc -p tsconfig.build.json",
+    "typecheck": "prisma generate && tsc -p tsconfig.json --noEmit",
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@packages/core-domain": "workspace:*",
+    "@packages/database-common": "workspace:*",
+    "@prisma/client": "~6.19.3",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "prisma": "~6.19.3",
+    "tsx": "^4.20.0",
+    "vitest": "^3.2.7"
+  }
+}

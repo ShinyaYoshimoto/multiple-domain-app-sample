@@ -97,11 +97,12 @@ resource "google_secret_manager_secret_iam_member" "runtime_database_url" {
 # Cloud Run (v2) サービス
 # -----------------------------------------------------------------------------
 resource "google_cloud_run_v2_service" "this" {
-  name                = var.service_name
-  location            = var.region
-  ingress             = var.ingress
-  labels              = local.labels
-  deletion_protection = var.environment == "prd"
+  name                 = var.service_name
+  location             = var.region
+  ingress              = var.ingress
+  invoker_iam_disabled = var.invoker_iam_disabled
+  labels               = local.labels
+  deletion_protection  = var.environment == "prd"
 
   template {
     service_account                  = google_service_account.runtime.email

@@ -1,0 +1,32 @@
+// Domain B 専用の DB スキーマ。
+// ドメインごとに schema.prisma / Prisma Client を分離し、他ドメインのテーブルには直接アクセスしない。
+// （Item は Domain A の所有物なので、ここでは itemId を外部キー制約なしの値として保持するだけ）
+
+generator client {
+  provider = "prisma-client-js"
+  // 生成先をアプリ配下に固定する（理由は apps/domain-a-api/prisma/schema.prisma を参照）
+  output   = "../generated/prisma"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql" // AlloyDB は PostgreSQL 互換
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PLACED
+  CANCELLED
+}
+
+model Order {
+  id        String      @id @db.Uuid
+  itemId    String      @map("item_id") @db.Uuid
+  quantity  Int
+  status    OrderStatus
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  @@index([itemId])
+  @@map("orders")
+}
