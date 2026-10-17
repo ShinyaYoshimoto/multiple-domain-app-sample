@@ -1,0 +1,2 @@
+bucket = "my-gcp-project-tfstate"
+prefix = "shared-lb/dev"

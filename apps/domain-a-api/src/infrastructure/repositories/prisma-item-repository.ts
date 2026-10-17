@@ -1,9 +1,8 @@
+import { isUuid } from "@packages/core-domain";
 import { translatePrismaError } from "@packages/database-common";
 import type { ItemRepository } from "../../application/ports/item-repository";
 import { Item } from "../../domain/item";
 import type { Item as ItemRecord, PrismaClient } from "../../../generated/prisma";
-
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * ItemRepository ポートの Prisma アダプター。
@@ -14,7 +13,7 @@ export class PrismaItemRepository implements ItemRepository {
 
   async findById(id: string): Promise<Item | null> {
     // id カラムは uuid 型のため、UUID 形式でない値は DB に問い合わせずに「存在しない」とする
-    if (!UUID_PATTERN.test(id)) return null;
+    if (!isUuid(id)) return null;
 
     const record = await this.prisma.item.findUnique({ where: { id } });
     return record ? toDomain(record) : null;

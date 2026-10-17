@@ -1,0 +1,2 @@
+bucket = "my-gcp-project-tfstate"
+prefix = "domain-b-api/dev"

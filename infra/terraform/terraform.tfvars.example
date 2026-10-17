@@ -1,0 +1,26 @@
+project_id  = "my-gcp-project"
+region      = "asia-northeast1"
+name_prefix = "api"
+domains     = ["api.example.com"]
+
+services = {
+  domain-a = {
+    cloud_run_service = "domain-a-api"
+    path_prefixes     = ["/items"]
+  }
+  domain-b = {
+    cloud_run_service = "domain-b-api"
+    path_prefixes     = ["/orders"]
+  }
+}
+default_service = "domain-a"
+
+# 導入初期は true にして誤検知をログで確認してから false にする
+waf_preview = false
+
+rate_limit = {
+  count        = 300
+  interval_sec = 60
+}
+
+blocked_ip_ranges = []

@@ -44,8 +44,19 @@ variable "ingress" {
   }
 }
 
+variable "invoker_iam_disabled" {
+  description = <<-EOT
+    true の場合 Cloud Run の呼び出し元 IAM チェックを無効化する。
+    外部 LB（+ Cloud Armor）経由で公開 API にする場合に使う。ingress を INTERNAL_LOAD_BALANCER にしていれば
+    LB を経由しない直接アクセスは拒否されるため、allUsers に run.invoker を付与するより安全
+    （組織ポリシーの Domain Restricted Sharing にも抵触しない）。
+  EOT
+  type        = bool
+  default     = false
+}
+
 variable "invoker_members" {
-  description = "roles/run.invoker を付与するメンバー（LB 経由で公開 API にする場合は [\"allUsers\"]）"
+  description = "roles/run.invoker を付与するメンバー（サービス間呼び出しの SA など）"
   type        = list(string)
   default     = []
 }
